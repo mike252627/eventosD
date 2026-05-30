@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,10 +11,13 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
@@ -34,7 +38,12 @@
             flex-direction: column;
         }
 
-        h1, h2, h3, h4, h5, h6 {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             font-family: 'Outfit', sans-serif;
             font-weight: 700;
         }
@@ -162,6 +171,7 @@
         .hover-lift {
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
+
         .hover-lift:hover {
             transform: translateY(-3px);
         }
@@ -169,6 +179,7 @@
         @livewireStyles
     </style>
 </head>
+
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
@@ -176,28 +187,37 @@
             <a class="navbar-brand navbar-brand-custom" href="{{ route('home') }}">
                 <i class="bi bi-trophy-fill me-2 text-warning"></i>INTERTEC
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link nav-link-custom {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">
+                        <a class="nav-link nav-link-custom {{ request()->routeIs('home') ? 'active' : '' }}"
+                            href="{{ route('home') }}">
                             <i class="bi bi-house-door me-1"></i>Inicio
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-link-custom {{ request()->routeIs('teams.*') ? 'active' : '' }}" href="{{ route('teams.index') }}">
+                        <a class="nav-link nav-link-custom {{ request()->routeIs('teams.*') ? 'active' : '' }}"
+                            href="{{ route('teams.index') }}">
                             <i class="bi bi-shield me-1"></i>Equipos
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link nav-link-custom dropdown-toggle {{ request()->routeIs('games.*') ? 'active' : '' }}" href="#" id="navbarDropdownPartidos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link nav-link-custom dropdown-toggle {{ request()->routeIs('games.*') ? 'active' : '' }}"
+                            href="#" id="navbarDropdownPartidos" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
                             <i class="bi bi-calendar-event me-1"></i>Partidos
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-dark border-0 shadow-lg" aria-labelledby="navbarDropdownPartidos">
-                            <li><a class="dropdown-item" href="{{ route('games.index') }}"><i class="bi bi-calendar2-week me-2"></i>Todos los Partidos</a></li>
-                            <li><hr class="dropdown-divider"></li>
+                        <ul class="dropdown-menu dropdown-menu-dark border-0 shadow-lg"
+                            aria-labelledby="navbarDropdownPartidos">
+                            <li><a class="dropdown-item" href="{{ route('games.index') }}"><i
+                                        class="bi bi-calendar2-week me-2"></i>Todos los Partidos</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
                             @foreach(\App\Models\Discipline::orderBy('name')->get() as $disc)
                                 <li>
                                     <a class="dropdown-item" href="{{ route('games.discipline', $disc->id) }}">
@@ -252,13 +272,16 @@
     <footer class="footer">
         <div class="container text-center">
             <p class="mb-1">&copy; {{ date('Y') }} EventosDeportivos. Todos los derechos reservados.</p>
-            <small class="text-muted">Diseñado con <i class="bi bi-heart-fill text-danger"></i> para la gestión deportiva de alto nivel.</small>
+
         </div>
     </footer>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
     @livewireScripts
 </body>
+
 </html>

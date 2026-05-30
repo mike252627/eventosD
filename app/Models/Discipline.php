@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
  
-#[Fillable(['name'])]
+#[Fillable(['name', 'icon_type', 'icon_class', 'image_path'])]
 class Discipline extends Model
 {
     use HasFactory;

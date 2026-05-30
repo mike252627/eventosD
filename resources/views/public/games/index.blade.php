@@ -17,15 +17,21 @@
                 <i class="bi bi-grid-fill me-1"></i>Todas las Disciplinas
             </a>
             @foreach($disciplines as $disc)
-                <a href="{{ route('games.discipline', $disc->id) }}" class="btn btn-sm {{ (!is_null($selectedDiscipline) && $selectedDiscipline->id === $disc->id) ? 'btn-primary' : 'btn-outline-primary' }} rounded-pill px-3 py-2">
-                    @if(Str::slug($disc->name) === 'futbol')
-                        <i class="bi bi-dribbble me-1"></i>
-                    @elseif(Str::slug($disc->name) === 'basquetbol')
-                        <i class="bi bi-dribbble me-1"></i>
-                    @elseif(Str::slug($disc->name) === 'voleibol')
-                        <i class="bi bi-dribbble me-1"></i>
+                <a href="{{ route('games.discipline', $disc->id) }}" class="btn btn-sm {{ (!is_null($selectedDiscipline) && $selectedDiscipline->id === $disc->id) ? 'btn-primary' : 'btn-outline-primary' }} rounded-pill px-3 py-2 d-inline-flex align-items-center">
+                    @if($disc->icon_type === 'image' && $disc->image_path)
+                        <img src="{{ asset('storage/' . $disc->image_path) }}" alt="" style="width: 18px; height: 18px; object-fit: contain;" class="me-1">
+                    @elseif($disc->icon_type === 'icon' && $disc->icon_class)
+                        <i class="bi {{ $disc->icon_class }} me-1"></i>
                     @else
-                        <i class="bi bi-play-circle-fill me-1"></i>
+                        @if(Str::slug($disc->name) === 'futbol')
+                            <i class="bi bi-dribbble me-1"></i>
+                        @elseif(Str::slug($disc->name) === 'basquetbol')
+                            <i class="bi bi-dribbble me-1"></i>
+                        @elseif(Str::slug($disc->name) === 'voleibol')
+                            <i class="bi bi-dribbble me-1"></i>
+                        @else
+                            <i class="bi bi-play-circle-fill me-1"></i>
+                        @endif
                     @endif
                     {{ $disc->name }}
                 </a>

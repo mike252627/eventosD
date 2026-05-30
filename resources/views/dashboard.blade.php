@@ -22,6 +22,9 @@
                     <button class="btn btn-info px-4 py-2 text-white" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); border: none;" type="button" onclick="toggleSection('usuarios')">
                         <i class="bi bi-people-fill me-2"></i>Módulo de Usuarios (Admin)
                     </button>
+                    <button class="btn btn-success px-4 py-2 text-white" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none;" type="button" onclick="toggleSection('disciplinas')">
+                        <i class="bi bi-collection-fill me-2"></i>Módulo de Disciplinas (Admin)
+                    </button>
                 </div>
             </div>
         </div>
@@ -59,6 +62,14 @@
                         <livewire:manage-users />
                     </div>
                 </div>
+
+                <!-- Disciplinas Section (Collapsible) -->
+                <div class="collapse" id="disciplinasSection">
+                    <div class="p-4 border rounded-4 bg-white shadow-sm mb-4">
+                        <h4 class="fw-bold mb-4 text-dark border-bottom pb-2"><i class="bi bi-collection-fill text-success me-2"></i>Administración de Disciplinas (Admin)</h4>
+                        <livewire:manage-disciplines />
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -69,18 +80,21 @@
                 const arbSec = document.getElementById('arbitroSection');
                 const parSec = document.getElementById('partidosSection');
                 const usrSec = document.getElementById('usuariosSection');
+                const dspSec = document.getElementById('disciplinasSection');
                 const bootstrap = window.bootstrap;
                 
                 const bsSec = bootstrap.Collapse.getOrCreateInstance(secSec, {toggle: false});
                 const bsArb = bootstrap.Collapse.getOrCreateInstance(arbSec, {toggle: false});
                 const bsPar = bootstrap.Collapse.getOrCreateInstance(parSec, {toggle: false});
                 const bsUsr = bootstrap.Collapse.getOrCreateInstance(usrSec, {toggle: false});
+                const bsDsp = bootstrap.Collapse.getOrCreateInstance(dspSec, {toggle: false});
 
                 // Hide all
                 bsSec.hide();
                 bsArb.hide();
                 bsPar.hide();
                 bsUsr.hide();
+                bsDsp.hide();
 
                 // Show active
                 if (active === 'secretaria') {
@@ -91,6 +105,8 @@
                     bsPar.show();
                 } else if (active === 'usuarios') {
                     bsUsr.show();
+                } else if (active === 'disciplinas') {
+                    bsDsp.show();
                 }
             }
         </script>

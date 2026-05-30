@@ -147,14 +147,16 @@
                 </div>
             @endif
 
-            <!-- FORM 2: REGISTRAR PARTICIPANTE -->
+            <!-- FORM 2: REGISTRAR/EDITAR PARTICIPANTE -->
             @if(auth()->user()->hasRole('admin') || (auth()->user()->hasRole('secretaria') && $my_team))
                 <div class="card-premium mb-4">
                     <div class="card-header-premium" style="background: var(--secondary-gradient);">
-                        <h5 class="mb-0"><i class="bi bi-person-plus me-2 text-warning"></i>Registrar Nuevo Participante</h5>
+                        <h5 class="mb-0"><i class="bi {{ $is_editing_participant ? 'bi-pencil-square' : 'bi-person-plus' }} me-2 text-warning"></i>
+                            {{ $is_editing_participant ? 'Editar Integrante' : 'Registrar Nuevo Participante' }}
+                        </h5>
                     </div>
                     <div class="card-body p-4">
-                        <form wire:submit.prevent="createParticipant">
+                        <form wire:submit.prevent="{{ $is_editing_participant ? 'updateParticipant' : 'createParticipant' }}">
                             <div class="mb-3">
                                 <label for="participant_name" class="form-label fw-semibold">Nombre Completo</label>
                                 <input type="text" id="participant_name" wire:model="participant_name" class="form-control rounded-3 @error('participant_name') is-invalid @enderror" placeholder="Ej. Carlos Mendoza">
@@ -166,7 +168,7 @@
                             @if(auth()->user()->hasRole('admin'))
                                 <div class="mb-3">
                                     <label for="participant_team_id" class="form-label fw-semibold">Asignar a un Equipo</label>
-                                    <select id="participant_team_id" wire:model="participant_team_id" class="form-select rounded-3 @error('participant_team_id') is-invalid @enderror">
+                                    <select id="participant_team_id" wire:model="participant_team_id" class="form-select rounded-3 @error('participant_team_id') is-invalid @enderror" {{ $is_editing_participant ? 'disabled' : '' }}>
                                         <option value="">-- Seleccionar Equipo --</option>
                                         @foreach($teams as $team)
                                             <option value="{{ $team->id }}">{{ $team->name }}</option>
@@ -185,7 +187,9 @@
                             @endif
 
                             <div class="mb-3">
-                                <label for="participant_photo" class="form-label fw-semibold">Foto del Participante (Opcional)</label>
+                                <label for="participant_photo" class="form-label fw-semibold">
+                                    {{ $is_editing_participant ? 'Actualizar Foto (Opcional)' : 'Foto del Participante (Opcional)' }}
+                                </label>
                                 <input type="file" id="participant_photo" wire:model="participant_photo" class="form-control rounded-3 @error('participant_photo') is-invalid @enderror" accept="image/png">
                                 <div class="form-text text-danger fw-semibold"><i class="bi bi-info-circle me-1"></i>Solo se aceptan imágenes en formato PNG (máx. 2MB).</div>
                                 @error('participant_photo')
@@ -204,6 +208,11 @@
                                             <img src="{{ $previewUrl }}" class="rounded border" style="width: 70px; height: 70px; object-fit: cover;">
                                         </div>
                                     @endif
+                                @elseif($is_editing_participant && $current_participant_photo)
+                                    <div class="mt-2 text-center">
+                                        <span class="text-muted small d-block mb-1">Foto actual:</span>
+                                        <img src="{{ asset('storage/' . $current_participant_photo) }}" class="rounded border" style="width: 70px; height: 70px; object-fit: cover;">
+                                    </div>
                                 @else
                                     <div class="alert alert-warning py-2 rounded-3 text-center small mt-2 mb-0">
                                         <i class="bi bi-exclamation-triangle-fill me-1"></i>No se ha seleccionado ninguna foto. Se usará el avatar por defecto.
@@ -211,7 +220,15 @@
                                 @endif
                             </div>
 
-                            <button type="submit" class="btn btn-premium w-100 py-2" style="background: var(--secondary-gradient);"><i class="bi bi-plus-circle me-1"></i>Dar de Alta Participante</button>
+                            <div class="d-flex gap-2">
+                                @if($is_editing_participant)
+                                    <button type="button" wire:click="cancelParticipantEdit" class="btn btn-outline-secondary w-50 py-2">Cancelar</button>
+                                @endif
+                                <button type="submit" class="btn btn-premium {{ $is_editing_participant ? 'w-50' : 'w-100' }} py-2" style="background: var(--secondary-gradient);">
+                                    <i class="bi {{ $is_editing_participant ? 'bi-save' : 'bi-plus-circle' }} me-1"></i>
+                                    {{ $is_editing_participant ? 'Guardar Cambios' : 'Dar de Alta Participante' }}
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -312,7 +329,8 @@
                                                     <tr class="table-secondary">
                                                         <th class="small py-1 ps-2" style="width: 50px;">Foto</th>
                                                         <th class="small py-1">Nombre</th>
-                                                        <th class="small py-1 text-end pe-2">Disciplinas</th>
+                                                        <th class="small py-1 text-center" style="width: 140px;">Disciplinas</th>
+                                                        <th class="small py-1 text-end pe-2" style="width: 90px;">Acciones</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -328,9 +346,9 @@
                                                                 @endif
                                                             </td>
                                                             <td class="small py-2 fw-medium text-slate-700">{{ $participant->name }}</td>
-                                                            <td class="small py-2 text-end pe-2">
+                                                            <td class="small py-2 text-center">
                                                                 @forelse($participant->disciplines as $discipline)
-                                                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2 py-1 mx-1" style="font-size: 0.7rem;">
+                                                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2 py-1" style="font-size: 0.7rem; display: inline-block; margin-bottom: 2px;">
                                                                         {{ $discipline->name }}
                                                                     </span>
                                                                 @empty
@@ -338,6 +356,14 @@
                                                                         Ninguna
                                                                     </span>
                                                                 @endforelse
+                                                            </td>
+                                                            <td class="small py-2 text-end pe-2 text-nowrap">
+                                                                <button wire:click="startEditParticipant({{ $participant->id }})" class="btn btn-sm btn-outline-primary p-1 py-0 rounded-circle" title="Editar Integrante" style="font-size: 0.75rem;">
+                                                                    <i class="bi bi-pencil-fill"></i>
+                                                                </button>
+                                                                <button onclick="confirm('¿Estás seguro de eliminar este integrante del equipo?') || event.stopImmediatePropagation()" wire:click="deleteParticipant({{ $participant->id }})" class="btn btn-sm btn-outline-danger p-1 py-0 rounded-circle" title="Eliminar Integrante" style="font-size: 0.75rem;">
+                                                                    <i class="bi bi-trash-fill"></i>
+                                                                </button>
                                                             </td>
                                                         </tr>
                                                     @endforeach

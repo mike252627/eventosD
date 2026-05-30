@@ -7,6 +7,7 @@ use App\Models\Participant;
 use App\Models\Team;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
  
 class SecretariaDashboard extends Component
 {
@@ -23,10 +24,14 @@ class SecretariaDashboard extends Component
  
     public $selected_participant_id = '';
     public $selected_discipline_ids = [];
+
+    public $is_editing_participant = false;
+    public $editing_participant_id = null;
+    public $current_participant_photo = null;
  
     public function mount()
     {
-        if (!auth()->user()->hasAnyRole(['admin', 'secretaria'])) {
+        if (!auth()->check() || !auth()->user()->hasAnyRole(['admin', 'secretaria'])) {
             abort(403, 'No autorizado.');
         }
  
@@ -208,11 +213,125 @@ class SecretariaDashboard extends Component
             'photo' => $photoPath,
         ]);
  
-        $this->reset(['participant_name', 'participant_photo']);
-        if (auth()->user()->hasRole('admin')) {
+        $this->resetParticipantForm();
+        session()->flash('status', 'Participante registrado con éxito.');
+    }
+
+    public function startEditParticipant($id)
+    {
+        if (!auth()->user()->hasAnyRole(['admin', 'secretaria'])) {
+            abort(403, 'No autorizado.');
+        }
+
+        $participant = Participant::findOrFail($id);
+
+        if (auth()->user()->hasRole('secretaria') && $participant->team_id !== $this->my_team->id) {
+            abort(403, 'No autorizado.');
+        }
+
+        $this->editing_participant_id = $participant->id;
+        $this->participant_name = $participant->name;
+        $this->participant_team_id = $participant->team_id;
+        $this->current_participant_photo = $participant->photo;
+        $this->participant_photo = null;
+        $this->is_editing_participant = true;
+    }
+
+    public function cancelParticipantEdit()
+    {
+        $this->resetParticipantForm();
+    }
+
+    public function resetParticipantForm()
+    {
+        $this->reset([
+            'participant_name',
+            'participant_photo',
+            'current_participant_photo',
+            'is_editing_participant',
+            'editing_participant_id'
+        ]);
+
+        if (auth()->user()->hasRole('secretaria') && $this->my_team) {
+            $this->participant_team_id = $this->my_team->id;
+        } else {
             $this->reset('participant_team_id');
         }
-        session()->flash('status', 'Participante registrado con éxito.');
+    }
+
+    public function updateParticipant()
+    {
+        if (!auth()->user()->hasAnyRole(['admin', 'secretaria'])) {
+            abort(403, 'No autorizado.');
+        }
+
+        $participant = Participant::findOrFail($this->editing_participant_id);
+
+        if (auth()->user()->hasRole('secretaria')) {
+            if ($participant->team_id !== $this->my_team->id) {
+                abort(403, 'No autorizado.');
+            }
+            $this->participant_team_id = $this->my_team->id;
+        }
+
+        $this->validate([
+            'participant_name' => 'required|string|min:3|max:100',
+            'participant_team_id' => 'required|exists:teams,id',
+            'participant_photo' => 'nullable|image|mimes:png|max:2048',
+        ], [
+            'participant_name.required' => 'El nombre del participante es obligatorio.',
+            'participant_team_id.required' => 'Debe seleccionar un equipo.',
+            'participant_photo.image' => 'El archivo debe ser una imagen.',
+            'participant_photo.mimes' => 'La foto debe ser en formato PNG.',
+            'participant_photo.max' => 'La foto no debe pesar más de 2MB.',
+        ]);
+
+        $photoPath = $participant->photo;
+
+        if ($this->participant_photo) {
+            if ($participant->photo) {
+                Storage::disk('public')->delete($participant->photo);
+            }
+            $photoPath = $this->participant_photo->store('photos', 'public');
+        }
+
+        $participant->update([
+            'name' => $this->participant_name,
+            'team_id' => $this->participant_team_id,
+            'photo' => $photoPath,
+        ]);
+
+        $this->resetParticipantForm();
+        session()->flash('status', 'Participante actualizado con éxito.');
+    }
+
+    public function deleteParticipant($id)
+    {
+        if (!auth()->user()->hasAnyRole(['admin', 'secretaria'])) {
+            abort(403, 'No autorizado.');
+        }
+
+        $participant = Participant::findOrFail($id);
+
+        if (auth()->user()->hasRole('secretaria') && $participant->team_id !== $this->my_team->id) {
+            abort(403, 'No autorizado.');
+        }
+
+        if ($participant->photo) {
+            Storage::disk('public')->delete($participant->photo);
+        }
+
+        $participant->delete();
+
+        if ($this->editing_participant_id == $id) {
+            $this->resetParticipantForm();
+        }
+
+        if ($this->selected_participant_id == $id) {
+            $this->reset(['selected_participant_id', 'selected_discipline_ids']);
+        }
+
+        session()->flash('status', 'Participante eliminado con éxito.');
     }
  
     public function assignDisciplines()

@@ -22,21 +22,27 @@
             @foreach($disciplines as $discipline)
                 <div class="col-6 col-md-4 col-lg-2">
                     <div class="p-3 border rounded-3 bg-light text-center hover-lift h-100 d-flex flex-column justify-content-center">
-                        <div class="fs-4 text-primary mb-2">
-                            @if(Str::slug($discipline->name) === 'futbol')
-                                <i class="bi bi-dribbble text-success"></i>
-                            @elseif(Str::slug($discipline->name) === 'basquetbol')
-                                <i class="bi bi-dribbble text-warning"></i>
-                            @elseif(Str::slug($discipline->name) === 'voleibol')
-                                <i class="bi bi-dribbble text-info"></i>
-                            @elseif(Str::slug($discipline->name) === 'beisbol')
-                                <i class="bi bi-dribbble text-danger"></i>
-                            @elseif(Str::slug($discipline->name) === 'ajedrez')
-                                <i class="bi bi-grid-3x3-gap-fill text-secondary"></i>
-                            @elseif(Str::slug($discipline->name) === 'atletismo')
-                                <i class="bi bi-lightning-charge-fill text-warning"></i>
+                        <div class="fs-4 text-primary mb-2 d-flex align-items-center justify-content-center" style="height: 38px;">
+                            @if($discipline->icon_type === 'image' && $discipline->image_path)
+                                <img src="{{ asset('storage/' . $discipline->image_path) }}" alt="{{ $discipline->name }}" style="max-width: 38px; max-height: 38px; object-fit: contain;">
+                            @elseif($discipline->icon_type === 'icon' && $discipline->icon_class)
+                                <i class="bi {{ $discipline->icon_class }} text-primary"></i>
                             @else
-                                <i class="bi bi-trophy-fill text-primary"></i>
+                                @if(Str::slug($discipline->name) === 'futbol')
+                                    <i class="bi bi-dribbble text-success"></i>
+                                @elseif(Str::slug($discipline->name) === 'basquetbol')
+                                    <i class="bi bi-dribbble text-warning"></i>
+                                @elseif(Str::slug($discipline->name) === 'voleibol')
+                                    <i class="bi bi-dribbble text-info"></i>
+                                @elseif(Str::slug($discipline->name) === 'beisbol')
+                                    <i class="bi bi-dribbble text-danger"></i>
+                                @elseif(Str::slug($discipline->name) === 'ajedrez')
+                                    <i class="bi bi-grid-3x3-gap-fill text-secondary"></i>
+                                @elseif(Str::slug($discipline->name) === 'atletismo')
+                                    <i class="bi bi-lightning-charge-fill text-warning"></i>
+                                @else
+                                    <i class="bi bi-trophy-fill text-primary"></i>
+                                @endif
                             @endif
                         </div>
                         <h6 class="fw-bold mb-0 text-slate-700 small">{{ $discipline->name }}</h6>
