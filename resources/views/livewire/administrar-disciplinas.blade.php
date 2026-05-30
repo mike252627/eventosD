@@ -79,25 +79,34 @@
 
                         <!-- Sección condicional de ICONO -->
                         @if($icon_type === 'icon')
-                            <div class="col-md-6">
-                                <label for="icon_select" class="form-label fw-semibold">Seleccionar Icono Recomendado</label>
-                                <select id="icon_select" wire:model.live="icon_class" class="form-select rounded-3">
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Seleccionar Icono Recomendado</label>
+                                <div class="row g-2 mb-3">
                                     @foreach($recommended_icons as $value => $label)
-                                        <option value="{{ $value }}">{{ $label }} ({{ $value }})</option>
+                                        <div class="col-4 col-sm-3 col-md-2">
+                                            <button type="button" 
+                                                wire:click="$set('icon_class', '{{ $value }}')" 
+                                                class="btn w-100 p-2 border rounded-3 text-center d-flex flex-column align-items-center justify-content-center hover-lift {{ $icon_class === $value ? 'btn-primary border-primary text-white shadow-sm' : 'btn-light bg-white text-dark border-light-subtle' }}" 
+                                                style="min-height: 85px; transition: all 0.2s;"
+                                                title="{{ $label }}">
+                                                <i class="bi {{ $value }} fs-3 mb-1"></i>
+                                                <span class="small text-truncate w-100" style="font-size: 0.65rem;">{{ $label }}</span>
+                                            </button>
+                                        </div>
                                     @endforeach
-                                </select>
-
-                                <div class="mt-3">
-                                    <label for="custom_icon" class="form-label fw-semibold small text-muted">O escribe una clase de Bootstrap Icons personalizada</label>
-                                    <input type="text" id="custom_icon" wire:model.live="icon_class" class="form-control rounded-3 @error('icon_class') is-invalid @enderror" placeholder="Ej. bi-trophy">
-                                    @error('icon_class')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
                                 </div>
                             </div>
 
+                            <div class="col-md-6">
+                                <label for="custom_icon" class="form-label fw-semibold small text-muted">¿Deseas otro? Escribe cualquier clase de Bootstrap Icons</label>
+                                <input type="text" id="custom_icon" wire:model.live="icon_class" class="form-control rounded-3 @error('icon_class') is-invalid @enderror" placeholder="Ej. bi-trophy">
+                                @error('icon_class')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             <div class="col-md-6 text-center d-flex flex-column align-items-center justify-content-center border rounded-3 p-3 bg-light">
-                                <span class="text-muted small fw-semibold mb-2">Vista Previa del Icono</span>
+                                <span class="text-muted small fw-semibold mb-2">Vista Previa del Icono Seleccionado</span>
                                 <div class="p-3 bg-white rounded-circle shadow-sm border d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
                                     @if(!empty($icon_class))
                                         <i class="bi {{ $icon_class }} fs-1 text-primary"></i>

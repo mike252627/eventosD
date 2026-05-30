@@ -23,19 +23,14 @@ class ManageDisciplines extends Component
 
     // Lista de iconos comunes recomendados para deportes
     public $recommended_icons = [
+        'bi-dribbble' => 'Balón (Deportes)',
+        'bi-grid-3x3-gap-fill' => 'Tablero (Ajedrez)',
+        'bi-lightning-charge-fill' => 'Rayo (Atletismo)',
         'bi-trophy-fill' => 'Trofeo (General)',
-        'bi-dribbble' => 'Balon (Deporte General)',
-        'bi-flag-fill' => 'Meta/Bandera',
-        'bi-activity' => 'Ritmo/Fitness',
+        'bi-activity' => 'Actividad/Fitness',
         'bi-award-fill' => 'Medalla/Premio',
-        'bi-lightning-fill' => 'Rayo/Velocidad',
-        'bi-person-running' => 'Correr/Atletismo',
-        'bi-bicycle' => 'Ciclismo',
-        'bi-water' => 'Natación/Acuático',
-        'bi-controller' => 'Mando/Ajedrez/E-sports',
-        'bi-fire' => 'Fuego/Competición',
-        'bi-star-fill' => 'Estrella/Destacado',
-        'bi-heart-fill' => 'Corazón/Pasión',
+        'bi-person-running' => 'Atletismo/Correr',
+        'bi-bicycle' => 'Ciclismo/Bici',
     ];
 
     public function mount()
