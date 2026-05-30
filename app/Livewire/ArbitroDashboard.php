@@ -92,7 +92,7 @@ class ArbitroDashboard extends Component
             $disciplineName = $user->discipline ? $user->discipline->name : 'Ninguna';
         }
  
-        return view('livewire.arbitro-dashboard', compact('games', 'disciplineName'))
+        return view('livewire.panel-arbitro', compact('games', 'disciplineName'))
             ->layout('layouts.bootstrap');
     }
 }

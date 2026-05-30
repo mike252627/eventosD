@@ -10,7 +10,7 @@ class EquipoController extends Controller
     public function index()
     {
         $teams = Team::withCount('participants')->orderBy('name')->get();
-        return view('public.teams.index', compact('teams'));
+        return view('public.equipos.index', compact('teams'));
     }
  
     public function create()
@@ -45,7 +45,7 @@ class EquipoController extends Controller
     public function show(Team $team)
     {
         $team->load(['participants.disciplines']);
-        return view('public.teams.show', compact('team'));
+        return view('public.equipos.show', compact('team'));
     }
  
     public function edit(Team $team)

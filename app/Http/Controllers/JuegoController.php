@@ -16,7 +16,7 @@ class JuegoController extends Controller
         $disciplines = Discipline::orderBy('name')->get();
         $selectedDiscipline = null;
  
-        return view('public.games.index', compact('games', 'disciplines', 'selectedDiscipline'));
+        return view('public.partidos.index', compact('games', 'disciplines', 'selectedDiscipline'));
     }
  
     public function create()

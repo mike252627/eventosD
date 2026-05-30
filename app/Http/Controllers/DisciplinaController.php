@@ -41,7 +41,7 @@ class DisciplinaController extends Controller
         $disciplines = Discipline::orderBy('name')->get();
         $selectedDiscipline = $discipline;
  
-        return view('public.games.index', compact('games', 'disciplines', 'selectedDiscipline'));
+        return view('public.partidos.index', compact('games', 'disciplines', 'selectedDiscipline'));
     }
  
     public function edit(Discipline $discipline)

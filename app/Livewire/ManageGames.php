@@ -175,7 +175,7 @@ class ManageGames extends Component
         
         $referees = User::role('arbitro')->orderBy('name')->get();
  
-        return view('livewire.manage-games', compact('games', 'teams', 'disciplines', 'referees'))
+        return view('livewire.administrar-partidos', compact('games', 'teams', 'disciplines', 'referees'))
             ->layout('layouts.bootstrap');
     }
 }

@@ -21,13 +21,13 @@ class PublicoController extends Controller
     public function teams()
     {
         $teams = Team::withCount('participants')->orderBy('name')->get();
-        return view('public.teams.index', compact('teams'));
+        return view('public.equipos.index', compact('teams'));
     }
  
     public function teamDetail(Team $team)
     {
         $team->load(['participants.disciplines']);
-        return view('public.teams.show', compact('team'));
+        return view('public.equipos.show', compact('team'));
     }
  
     public function games(Request $request)
@@ -38,7 +38,7 @@ class PublicoController extends Controller
         $disciplines = Discipline::orderBy('name')->get();
         $selectedDiscipline = null;
  
-        return view('public.games.index', compact('games', 'disciplines', 'selectedDiscipline'));
+        return view('public.partidos.index', compact('games', 'disciplines', 'selectedDiscipline'));
     }
  
     public function gamesByDiscipline(Discipline $discipline)
@@ -50,6 +50,6 @@ class PublicoController extends Controller
         $disciplines = Discipline::orderBy('name')->get();
         $selectedDiscipline = $discipline;
  
-        return view('public.games.index', compact('games', 'disciplines', 'selectedDiscipline'));
+        return view('public.partidos.index', compact('games', 'disciplines', 'selectedDiscipline'));
     }
 }

@@ -212,7 +212,7 @@ class ManageDisciplines extends Component
             ->orderBy('name')
             ->get();
 
-        return view('livewire.manage-disciplines', compact('disciplines'))
+        return view('livewire.administrar-disciplinas', compact('disciplines'))
             ->layout('layouts.bootstrap');
     }
 }

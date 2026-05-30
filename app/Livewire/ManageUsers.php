@@ -152,7 +152,7 @@ class ManageUsers extends Component
  
         $disciplines = Discipline::orderBy('name')->get();
  
-        return view('livewire.manage-users', compact('users', 'disciplines'))
+        return view('livewire.administrar-usuarios', compact('users', 'disciplines'))
             ->layout('layouts.bootstrap');
     }
 }

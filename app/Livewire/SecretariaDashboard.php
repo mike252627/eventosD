@@ -384,7 +384,7 @@ class SecretariaDashboard extends Component
  
         $disciplines = Discipline::orderBy('name')->get();
  
-        return view('livewire.secretaria-dashboard', compact('teams', 'participants', 'disciplines'))
+        return view('livewire.panel-secretaria', compact('teams', 'participants', 'disciplines'))
             ->layout('layouts.bootstrap');
     }
 }
